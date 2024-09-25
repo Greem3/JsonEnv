@@ -16,21 +16,28 @@ class EmptyFile(Exception):
     def __init__(self, args):
         super().__init__(args)
 
-class Env():
-    _instance = None
-    path: str
+class ConstPath(Exception):
     
-    def __new__(cls, path: str):
-        
-        if cls._instance is None:
-            cls._instance = super(Env, cls).__new__(cls)
-            
+    def __init__(self, args):
+        super().__init__(args)
+
+class UnassignedPath(Exception):
+    
+    def __init__(self, args):
+        super().__init__(args)
+
+class env():
+    __path: str = None
+    
+    @classmethod
+    def load_env(cls, path: str):
+        if cls.__path is None:
             cls.__is_json(path)
             cls.__verify_path(path)
-            
-            cls._instance.path = path
+            cls.__path = path  # Asigna el path
+            return
         
-        return cls._instance
+        raise ConstPath("The path cannot be changed.")
     
     @staticmethod
     def __is_json(path: str):
@@ -63,13 +70,23 @@ class Env():
             
             raise EmptyFile("The file is empty")
     
-    def get(self, key: str) -> any:
+    def __has_path(cls):
         
-        with open(self.path, 'r') as env:
+        if cls.__path is None:
+            raise UnassignedPath("The path is not assignet")
+    
+    @classmethod
+    def get(cls, key: str) -> any:
+        
+        cls.__has_path(cls)
+        
+        with open(cls.__path, 'r') as env:
             return json.loads(env.read())['env'].get(key, None)
     
-    def get_env(self) -> dict:
+    @classmethod
+    def get_env(cls) -> dict:
         
-        with open(self.path, 'r') as env:
-            
+        cls.__has_path(cls)
+        
+        with open(cls.__path, 'r') as env:
             return json.loads(env.read())['env']
