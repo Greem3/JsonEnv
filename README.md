@@ -6,11 +6,11 @@ JsonEnv is a Python library that allows you to use a json file to create environ
 
 ### How to create an environment class:
 
-`
+```
 from JsonEnv.jsonenv import Env
 
 env: Env = Env("file_path.json")
-`
+```
 
 ### How to get the value of a key from the environment:
 
@@ -28,11 +28,11 @@ JsonEnv es una libreria de Python que te permite usar un archivo json para crear
 
 ### Como crear una clase de entorno:
 
-`
+```
 from JsonEnv.jsonenv import Env
 
 env: Env = Env("ruta_de_archivo.json")
-`
+```
 
 ### Como conseguir el valor de una llave de entorno:
 
