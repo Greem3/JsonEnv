@@ -30,7 +30,15 @@ class env():
     __path: str = None
     
     @classmethod
-    def load_env(cls, path: str):
+    def load(cls, path: str):
+        """Load a file how a env
+
+        Args:
+            path (str): File Path
+
+        Raises:
+            ConstPath: Only if the path is not None
+        """
         if cls.__path is None:
             cls.__is_json(path)
             cls.__verify_path(path)
@@ -81,6 +89,14 @@ class env():
     
     @classmethod
     def get(cls, key: str) -> any:
+        """Get a value of a key of the env
+
+        Args:
+            key (str): Env key
+
+        Returns:
+            any: The value of the key
+        """
         
         cls.__has_path(cls)
         
@@ -97,13 +113,87 @@ class env():
     
     @classmethod
     def change(cls, key: str, value: any):
+        """Change a value of a key
+
+        Args:
+            key (str): Env key
+            value (any): New value
+        """
         
         cls.__has_path(cls)
+        
+        data: dict = cls.__get_env()
+        data['env'][key] = value
             
         with open(cls.__path, 'w') as wenv:
-            
-            data: dict = cls.__get_env()
-            
-            data['env'][key] = value
-            
             json.dump(data, wenv, indent=4)
+    
+    @classmethod
+    def change_get(cls, key: str, value: any) -> any:
+        """Change a env key value and after return the new value
+
+        Args:
+            key (str): Env Key
+            value (any): New value
+
+        Returns:
+            any: New value
+        """
+        
+        cls.change(key, value)
+        
+        return cls.get(key)
+    
+    @classmethod
+    def get_change(cls, key: str, value: any) -> any:
+        """Return a key value, and after change the key value
+
+        Args:
+            key (str): Env Key
+            value (any): New value for the key
+        """
+        
+        getter: any = cls.get(key)
+        cls.change(key, value)
+        
+        return getter
+    
+    @classmethod
+    def invert(cls, key: str):
+        """Invert the bool value of a environment var
+
+        Args:
+            key (str): Env key
+        """
+        
+        cls.change(key, not cls.get(key))
+    
+    @classmethod
+    def get_invert(cls, key: str) -> bool:
+        """Return a key and after change the value to false or true
+
+        Args:
+            key (str): Env key
+        
+        Returns:
+            bool: Key Value
+        """
+        
+        value: bool = cls.get(key)
+        cls.invert(key)
+        
+        return value
+    
+    @classmethod
+    def invert_get(cls, key: str) -> bool:
+        """Change a key value and return the new value
+
+        Args:
+            key (str): Env Key
+
+        Returns:
+            bool: New key value
+        """
+        
+        cls.invert(key)
+        return cls.get(key)
