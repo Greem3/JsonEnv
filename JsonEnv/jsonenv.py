@@ -104,6 +104,6 @@ class env():
             
             data: dict = cls.__get_env()
             
-            data[key] = value
+            data['env'][key] = value
             
             json.dump(data, wenv, indent=4)
