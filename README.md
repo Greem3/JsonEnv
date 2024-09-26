@@ -20,6 +20,10 @@ env.load_env("path")
 
 `env.get_env()`
 
+### How change a key value:
+
+`env.change("key_name", "new_value")`
+
 # Español
 
 ## Que es JsonEnv?
@@ -41,3 +45,7 @@ env.load_env("ruta")
 ### Como conseguir todo el entorno:
 
 `env.get_env()`
+
+### Como cambiar el valor de una llave:
+
+`env.change("nombre_llave", "nuevo_valor")`

@@ -53,7 +53,11 @@ class env():
             with open(path, 'w') as file:
                 file: TextIOWrapper
                 
-                json.dump({"env" : {}}, file, indent=4)
+                json.dump({
+                    "env" : {
+                        
+                    }
+                }, file, indent=4)
                 
             return
         
@@ -84,9 +88,22 @@ class env():
             return json.loads(env.read())['env'].get(key, None)
     
     @classmethod
-    def get_env(cls) -> dict:
+    def __get_env(cls) -> dict:
         
         cls.__has_path(cls)
         
         with open(cls.__path, 'r') as env:
-            return json.loads(env.read())['env']
+            return json.loads(env.read())
+    
+    @classmethod
+    def change(cls, key: str, value: any):
+        
+        cls.__has_path(cls)
+            
+        with open(cls.__path, 'w') as wenv:
+            
+            data: dict = cls.__get_env()
+            
+            data[key] = value
+            
+            json.dump(data, wenv, indent=4)
